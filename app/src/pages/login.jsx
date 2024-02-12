@@ -13,12 +13,12 @@ export function Login() {
           <InputBox
             heading={"Email"}
             placeholder={"madhu@gmail.com"}
-            type={"email"}
+            inputtype={"email"}
           />
           <InputBox
             heading={"password"}
             placeholder={"Enter your Password"}
-            type={"password"}
+            inputtype={"password"}
           />
           <Bottom
             text={"Don't have an account? "}

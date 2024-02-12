@@ -16,12 +16,12 @@ export function Signup() {
           <InputBox
             heading={"Email"}
             placeholder={"madhu@gmail.com"}
-            type={"email"}
+            inputtype={"email"}
           />
           <InputBox
             heading={"Password"}
             placeholder={"Enter Your Password"}
-            type={"password"}
+            inputtype={"password"}
           />
           <div className="pt-4">
             <Button text={"Sign Up"} />
