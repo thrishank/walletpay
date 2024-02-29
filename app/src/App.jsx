@@ -1,5 +1,4 @@
 import "./App.css";
-import { Heading } from "./components/heading";
 import { Dashboard } from "./pages/dashboard";
 import { Login } from "./pages/login";
 import { Send } from "./pages/send";
@@ -11,11 +10,11 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={Heading} />
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/send" element={<Send  name={"Thrishank"}/>} />
+          <Route path="/send" element={<Send name={"Thrishank"} />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -7,6 +7,21 @@ const { user, account } = require("../db/schema");
 const { auth_middlware } = require("../middleware/auth");
 
 const router = express.Router();
+
+router.post("/verify", (req, res) => {
+  let token = req.headers.authorization;
+  if (!token || !token.startsWith("Bearer"))
+    return res.status(411).send("Authorization token is missing");
+  token = token.split(" ")[1];
+  try {
+    var decoded = jwt.verify(token, process.env.JWT_PASSWORD);
+    req.userId = decoded.userId;
+    return res.status(200).text("verified");
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 const userSchema = z.object({
   username: z.string().email().toLowerCase(),
   firstName: z.string(),
@@ -17,7 +32,10 @@ const userSchema = z.object({
 router.post("/signup", async (req, res) => {
   try {
     const { success } = userSchema.safeParse(req.body);
-    if (!success) return res.status(411).json({ message: "Incorrect Inputs" });
+    if (!success)
+      return res.status(411).json({
+        message: "Incorrect Inputs",
+      });
 
     const found = await user.findOne({ username: req.body.username });
 

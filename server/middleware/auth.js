@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const auth_middlware = (req, res, next) => {
-  let token = req.headers.authorization;
+  let token = req.headers.Authorization;
   if (!token || !token.startsWith("Bearer"))
     return res.status(411).send("Authoriztion token is missing");
   token = token.split(" ")[1];
