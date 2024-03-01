@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bottom } from "../components/bottom";
 import { Heading } from "../components/heading";
 import { InputBox } from "../components/input";
@@ -7,11 +7,13 @@ import { Button } from "../components/button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const backend_url = "http://localhost:3000/api/v1/";
-export function Login() {
-  const naviagate = useNavigate();
-  const [obj, setObj] = useState({});
+// const backend_url = "http://localhost:3000/api/v1/";
+const backend_url = "https://walletpay-backend.onrender.com/api/v1/";
 
+export function Login() {
+  const navigate = useNavigate();
+  const [obj, setObj] = useState({});
+  const [loginresponse, setloginresponse] = useState("");
   const handleinputchange = (e, field) => {
     setObj((prevObj) => ({
       ...prevObj,
@@ -19,15 +21,37 @@ export function Login() {
     }));
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem("Authorization");
+    axios
+      .post(
+        backend_url + "user/verify",
+        {},
+        {
+          headers: {
+            authorization: token,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          navigate("/dashboard");
+        }
+      });
+  }, []);
   async function sendData() {
     try {
       const res = await axios.post(backend_url + "user/signin", obj);
       if (res.status === 200) {
-        naviagate("/dashboard");
+        setloginresponse(res.data.message);
+        navigate("/dashboard");
+        const expirytime = new Date().getTime() + 1000 * 60 * 10;
+        localStorage.setItem("time", expirytime);
         localStorage.setItem("Authorization", "Bearer " + res.data.token);
       }
     } catch (err) {
-      alert(err.message);
+      console.log(err);
     }
   }
 
@@ -57,6 +81,7 @@ export function Login() {
             to={"Sign Up"}
             component={"/signup"}
           />
+          <p>{loginresponse}</p>
         </div>
       </div>
     </div>

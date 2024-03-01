@@ -82,7 +82,9 @@ router.post("/signin", async (req, res) => {
         { userId: found._id },
         process.env.JWT_PASSWORD
       );
-      return res.status(200).json({ token: jwt_token });
+      return res
+        .status(200)
+        .json({ token: jwt_token, message: "Login Successful" });
     }
 
     res.status(411).json({ message: "User not found login first" });

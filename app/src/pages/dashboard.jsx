@@ -4,7 +4,19 @@ import { Heading } from "../components/heading";
 import { InputBox } from "../components/input";
 import { User } from "../components/user";
 
+// Search Users functionality
+// send money
+// If user is not logged in user should go to login page
 export function Dashboard() {
+  setInterval(() => {
+    const time = localStorage.getItem("time");
+    if (time < new Date().getTime()) {
+      localStorage.clear();
+    }
+    const token = localStorage.getItem("Authorization");
+    
+  }, [1000 * 60 * 5]);
+
   return (
     <div>
       <DashboardHeading username={"thrishank"} />

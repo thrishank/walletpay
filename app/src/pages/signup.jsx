@@ -7,11 +7,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// Add the msg function properly and if the user is already logged in then take the user to dashboard page
-// const backend_url = "https://walletpay-backend.onrender.com/api/v1/";
-const backend_url = "http://localhost:3000/api/v1/";
+thrishankkalluru@gmail.com// const backend_url = "http://localhost:3000/api/v1/";
 export function Signup() {
-  const naviagate = useNavigate();
+  const navigate = useNavigate();
   const [obj, setObj] = useState({});
   const [passwordstrength, setpasswordstrength] = useState("");
 
@@ -37,7 +35,7 @@ export function Signup() {
       )
       .then((response) => {
         if (response.status === 200) {
-          naviagate("/dashboard");
+          navigate("/dashboard");
         }
       });
   }, []);
@@ -56,8 +54,10 @@ export function Signup() {
     try {
       const res = await axios.post(backend_url + "user/signup", obj);
       if (res.status === 200) {
-        naviagate("/dashboard");
+        navigate("/dashboard");
         localStorage.setItem("Authorization", "Bearer " + res.data.token);
+        const expirytime = new Date().getTime() + 1000 * 60 * 10;
+        localStorage.setItem("time", expirytime);
       }
     } catch (err) {
       console.log(err);
