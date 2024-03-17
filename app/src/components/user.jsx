@@ -1,5 +1,8 @@
+import { Link, useNavigate } from "react-router-dom";
+import { Send } from "../pages/send";
 import { Button } from "./button";
 export function User({ name }) {
+  const navigate = useNavigate();
   return (
     <div className="flex p-4 justify-between">
       <div className="flex">
@@ -12,7 +15,12 @@ export function User({ name }) {
         <div className=" px-4 text-2xl">{name}</div>
       </div>
       <div className="flex flex-col justify-center h-ful">
-        <Button text={"Send Money"} />
+        <Button
+          text={"Send Money"}
+          onClick={() => {
+            navigate("/send", { state: { name } });
+          }}
+        />
       </div>
     </div>
   );
