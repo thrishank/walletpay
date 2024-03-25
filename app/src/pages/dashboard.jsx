@@ -25,7 +25,7 @@ export function Dashboard() {
   }, []);
 
   setInterval(check_token_expiration, 1000 * 60);
-  
+
   useEffect(() => {
     const token = localStorage.getItem("Authorization");
     axios
@@ -39,12 +39,17 @@ export function Dashboard() {
           },
         }
       )
-      .then((response) => {
-        if (response.status === 411) {
+      .then((res) => {
+        if (res.status === 411) {
           navigate("/login");
         }
+      })
+      .catch((Err) => {
+        navigate("/login");
+        console.log(Err);
       });
   }, []);
+
   const token = localStorage.getItem("Authorization");
   const [balance, setBalance] = useState(0);
   useEffect(() => {
@@ -62,9 +67,10 @@ export function Dashboard() {
       });
   }, []);
 
+  const name = localStorage.getItem("name");
   return (
     <div>
-      <DashboardHeading username={"thrishank"} />
+      {name && <DashboardHeading username={name} />}
       <Balance amount={balance} />
       <User />
     </div>

@@ -48,6 +48,7 @@ export function Login() {
         const expirytime = new Date().getTime() + 1000 * 60 * 20;
         localStorage.setItem("time", expirytime);
         localStorage.setItem("Authorization", "Bearer " + res.data.token);
+        localStorage.setItem("name", res.data.name);
       }
     } catch (err) {
       console.log(err);

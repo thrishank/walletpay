@@ -1,4 +1,4 @@
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "../components/button";
 import { Heading } from "../components/heading";
 import { InputBox } from "../components/input";
@@ -12,6 +12,23 @@ export function Send() {
   const id = searchParams.get("id");
   const name = searchParams.get("name");
   const [money, setMoney] = useState(0);
+
+  function transfer() {
+    axios.post(
+      backend_url + "account/transfer",
+      {
+        to: id,
+        amount: money,
+      },
+      {
+        headers: {
+          authorization: localStorage.getItem("Authorization"),
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+
   return (
     <div className="shadow-md">
       <div className="p-4 text-center">
@@ -36,24 +53,7 @@ export function Send() {
           onChange={(e) => setMoney(e.target.value)}
         />
         <div className="p-4">
-          <Button
-            text={"Initate Transfer"}
-            onClick={() => {
-              axios.post(
-                backend_url + "account/transfer",
-                {
-                  to: id,
-                  amount: money,
-                },
-                {
-                  headers: {
-                    authorization: localStorage.getItem("Authorization"),
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
-            }}
-          />
+          <Button text={"Initate Transfer"} onClick={transfer} />
         </div>
       </div>
     </div>

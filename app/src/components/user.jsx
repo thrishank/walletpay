@@ -10,7 +10,6 @@ export function User() {
   const [frnds, setFrnds] = useState([]);
   const [filter, setFilter] = useState("");
   useEffect(() => {
-    console.log(filter);
     axios
       .get(backend_url + "user/bulk?filter=" + filter)
       .then((res) => {

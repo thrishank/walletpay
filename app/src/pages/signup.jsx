@@ -58,6 +58,7 @@ export function Signup() {
         localStorage.setItem("Authorization", "Bearer " + res.data.token);
         const expirytime = new Date().getTime() + 1000 * 60 * 10;
         localStorage.setItem("time", expirytime);
+        localStorage.setItem("name", res.data.name);
       }
     } catch (err) {
       console.log(err);

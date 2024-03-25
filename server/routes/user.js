@@ -16,9 +16,9 @@ router.post("/verify", (req, res) => {
   try {
     var decoded = jwt.verify(token, process.env.JWT_PASSWORD);
     req.userId = decoded.userId;
-    return res.status(200).text("verified");
+    return res.status(200).send("verified");
   } catch (err) {
-    res.send(err);
+    res.status(411).send(err);
   }
 });
 
@@ -57,6 +57,7 @@ router.post("/signup", async (req, res) => {
     res.status(200).json({
       message: "User Created successfully",
       token: jwt_token,
+      name: req.body.firstName,
     });
   } catch (err) {
     res.status(411).send(err);
@@ -82,9 +83,11 @@ router.post("/signin", async (req, res) => {
         { userId: found._id },
         process.env.JWT_PASSWORD
       );
-      return res
-        .status(200)
-        .json({ token: jwt_token, message: "Login Successful" });
+      return res.status(200).json({
+        token: jwt_token,
+        message: "Login Successful",
+        name: found.firstName,
+      });
     }
 
     res.status(411).json({ message: "User not found login first" });
@@ -148,6 +151,5 @@ router.get("/bulk", async (req, res) => {
     })),
   });
 });
-
 
 module.exports = router;
