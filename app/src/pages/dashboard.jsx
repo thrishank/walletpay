@@ -5,19 +5,27 @@ import { User } from "../components/user";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const backend_url = "http://localhost:3000/api/v1/";
+const backend_url = import.meta.env.VITE_BACKEND_URL;
 
 export function Dashboard() {
   const navigate = useNavigate();
 
-  setInterval(() => {
+  function check_token_expiration() {
+    const token = localStorage.getItem("Authorization");
     const time = localStorage.getItem("time");
-    if (time < new Date().getTime()) {
+
+    if (!token || time < Date.now()) {
       localStorage.clear();
       navigate("/login");
     }
-  }, [1000 * 60 * 5]);
+  }
 
+  useEffect(() => {
+    check_token_expiration();
+  }, []);
+
+  setInterval(check_token_expiration, 1000 * 60);
+  
   useEffect(() => {
     const token = localStorage.getItem("Authorization");
     axios

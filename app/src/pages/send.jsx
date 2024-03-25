@@ -5,8 +5,7 @@ import { InputBox } from "../components/input";
 import { useState } from "react";
 import axios from "axios";
 
-const backend_url = "http://localhost:3000/api/v1/";
-// const backend_url = "https://walletpay-backend.onrender.com/api/v1/";
+const backend_url = import.meta.env.VITE_BACKEND_URL;
 
 export function Send() {
   const [searchParams] = useSearchParams();

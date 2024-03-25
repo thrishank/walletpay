@@ -7,8 +7,7 @@ import { Button } from "../components/button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const backend_url = "http://localhost:3000/api/v1/";
-// const backend_url = "https://walletpay-backend.onrender.com/api/v1/";
+const backend_url = import.meta.env.VITE_BACKEND_URL;
 
 export function Login() {
   const navigate = useNavigate();
@@ -46,7 +45,7 @@ export function Login() {
       if (res.status === 200) {
         setloginresponse(res.data.message);
         navigate("/dashboard");
-        const expirytime = new Date().getTime() + 1000 * 60 * 1000;
+        const expirytime = new Date().getTime() + 1000 * 60 * 20;
         localStorage.setItem("time", expirytime);
         localStorage.setItem("Authorization", "Bearer " + res.data.token);
       }

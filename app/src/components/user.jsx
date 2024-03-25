@@ -1,13 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Send } from "../pages/send";
+import { useNavigate } from "react-router-dom";
 import { Button } from "./button";
 import { useEffect, useState } from "react";
 import { InputBox } from "./input";
 import axios from "axios";
 
-export function User({ name }) {
-  const backend_url = "http://localhost:3000/api/v1/";
-  // const backend_url = "https://walletpay-backend.onrender.com/api/v1/";
+export function User() {
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
 
   const [frnds, setFrnds] = useState([]);
   const [filter, setFilter] = useState("");
