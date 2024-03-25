@@ -1,12 +1,18 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { Button } from "../components/button";
 import { Heading } from "../components/heading";
 import { InputBox } from "../components/input";
+import { useState } from "react";
+import axios from "axios";
+
+const backend_url = "http://localhost:3000/api/v1/";
+// const backend_url = "https://walletpay-backend.onrender.com/api/v1/";
 
 export function Send() {
-  const location = useLocation();
-  const { name } = location.state;
-  
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const name = searchParams.get("name");
+  const [money, setMoney] = useState(0);
   return (
     <div className="shadow-md">
       <div className="p-4 text-center">
@@ -28,9 +34,27 @@ export function Send() {
           heading={"Amount"}
           placeholder={"Enter Amount"}
           type={"number"}
+          onChange={(e) => setMoney(e.target.value)}
         />
         <div className="p-4">
-          <Button text={"Initate Transfer"} />
+          <Button
+            text={"Initate Transfer"}
+            onClick={() => {
+              axios.post(
+                backend_url + "account/transfer",
+                {
+                  to: id,
+                  amount: money,
+                },
+                {
+                  headers: {
+                    authorization: localStorage.getItem("Authorization"),
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
+            }}
+          />
         </div>
       </div>
     </div>

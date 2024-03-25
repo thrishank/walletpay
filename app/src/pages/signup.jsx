@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// const backend_url = "http://localhost:3000/api/v1/";
-const backend_url = "https://walletpay-backend.onrender.com/api/v1/";
+const backend_url = "http://localhost:3000/api/v1/";
+// const backend_url = "https://walletpay-backend.onrender.com/api/v1/";
 export function Signup() {
   const navigate = useNavigate();
   const [obj, setObj] = useState({});

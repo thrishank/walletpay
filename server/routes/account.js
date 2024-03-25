@@ -15,37 +15,41 @@ router.get("/balance", auth_middlware, async (req, res) => {
 });
 
 router.post("/transfer", auth_middlware, async (req, res) => {
-  const s = await mongoose.startSession();
-  s.startTransaction();
+  const session = await mongoose.startSession();
 
-  const from = await account.findOne({ userId: req.userId }).session(s);
+  session.startTransaction();
+  const { amount, to } = req.body;
 
-  if (req.body.amount > from.balance) {
-    await s.abortTransaction();
-    return res.status(400).json({ message: "Insufficient balance" });
+  // Fetch the accounts within the transaction
+  const from = await account.findOne({ userId: req.userId }).session(session);
+
+  if (!from || from.balance < amount) {
+    await session.abortTransaction();
+    return res.status(400).json({
+      message: "Insufficient balance",
+    });
   }
 
-  const to = await account.findOne({ userId: req.body.to });
+  const toAccount = await account.findOne({ userId: to }).session(session);
 
-  if (!to) {
-    await s.abortTransaction();
+  if (!toAccount) {
+    await session.abortTransaction();
     return res.status(400).json({
       message: "Invalid account",
     });
   }
 
-  await account.findOneAndUpdate(
-    { userId: req.userId },
-    { $inc: { balance: -req.body.amount } }
-  );
-  await account.findOneAndUpdate(
-    { userId: req.body.to },
-    { $inc: { balance: req.body.amount } }
-  );
+  // Perform the transfer
+  await account
+    .updateOne({ userId: req.userId }, { $inc: { balance: -amount } })
+    .session(session);
+  await account
+    .updateOne({ userId: to }, { $inc: { balance: amount } })
+    .session(session);
 
-  await s.commitTransaction();
-  
-  return res.status(200).json({
+  // Commit the transaction
+  await session.commitTransaction();
+  res.json({
     message: "Transfer successful",
   });
 });
